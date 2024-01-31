@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Job Portal</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    />
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-blue-500 p-4">
+      <div class="container mx-auto">
+        <a href="#" class="text-white font-bold text-lg">Job Portal</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero bg-gray-800 text-white">
+      <div class="container mx-auto text-center py-16">
+        <h1 class="text-4xl font-bold mb-4">Search Your Desired Job</h1>
+        <p class="text-sm">Use keywords or skills to fine tune the result</p>
+
+        <div class="container mx-auto mt-8">
+          <form id="search-form">
+            <input
+              type="text"
+              id="query"
+              class="border p-2 text-black w-96"
+              placeholder="Enter your text"
+            />
+            <button
+              type="button"
+              onclick="search()"
+              class="bg-blue-500 text-white p-2"
+            >
+              Search
+            </button>
+          </form>
+
+          <!-- <div id="result" class="mt-4"></div> -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="bg-white">
+      <div class="container mx-auto py-16">
+        <h2 class="text-3xl font-bold text-center mb-8">Details</h2>
+        <div class="">
+          <!-- Feature 1 -->
+          <div class="p-8 bg-gray-100 rounded-lg" id="result">
+            <h3 class="text-xl font-semibold mb-4"></h3>
+            <p class="text-gray-700"></p>
+          </div>
+
+          <!-- <div class="p-8 bg-gray-100 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Feature 2</h3>
+            <p class="text-gray-700">
+              Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+
+          <div class="p-8 bg-gray-100 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Feature 3</h3>
+            <p class="text-gray-700">
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris.
+            </p>
+          </div> -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto text-center">
+        <p>&copy; 2024 Your Job Portal. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      async function search() {
+        const query = document.getElementById("query").value;
+        const resultDiv = document.getElementById("result");
+
+        const response = await fetch("/search/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        const data = await response.json();
+        resultDiv.innerHTML = data.result
+          .map(
+            (item) =>
+              `<div class=\"p-8 bg-gray-100 rounded-lg text-black\"><h3 class=\"text-xl font-semibold mb-4\">\
+      Job Title: ${item["Job Title"]} \
+      </h3><p class=\"text-gray-700\">\
+      Job Requirments: ${item["Job Requirments"]} \
+      </p></div>`
+          )
+          .join("");
+      }
+    </script>
+  </body>
+</html>
